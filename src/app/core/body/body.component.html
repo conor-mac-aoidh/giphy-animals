@@ -1,3 +1,67 @@
-<p>
-  body works!
-</p>
+<div class="container">
+  <h1>Cute Animals!</h1>
+
+  <!-- toggle search -->
+  <div class="btn-group">
+    <label class="btn btn-primary" [(ngModel)]="radio" (ngModelChange)="search()" btnRadio="kittens">Kittens</label>
+    <label class="btn btn-primary" [(ngModel)]="radio" (ngModelChange)="search()" btnRadio="puppies">Puppies</label>
+  </div>
+
+  <div *ngIf="errorMsg !== ''" class="error">
+    {{errorMsg}}
+    <button (click)="this.search()" type="button" class="btn btn-primary">Retry</button>
+  </div>
+  <div *ngIf="errorMsg === ''">
+
+    <!-- results table -->
+    <sk-wave [isRunning]="loading" [@loadingAnim]></sk-wave>
+    <div [hidden]="loading" [@loadingAnim]>
+      <table class="table dataTable table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Gif</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let gif of gifs">
+            <td>{{gif.id}}</td>
+            <td><img [src]="gif.images.fixed_width.url" (click)="showModal(gif)" /></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- pagination -->
+      <pagination class="pagination-sm"
+                  [(ngModel)]="page"
+                  [totalItems]="totalItems"
+                  [itemsPerPage]="itemsPerPage"
+                  [maxSize]="maxSize"
+                  [boundaryLinks]="true"
+                  [rotate]="false"
+                  (pageChanged)="onChangeTable($event)"
+                  (numPages)="numPages = $event">
+      </pagination>
+      <pre class="card card-block card-header">
+        Page: {{page}} / {{numPages}}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- modal -->
+<div bsModal #modal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left" *ngIf="gif">Gif ID: {{gif.id}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img *ngIf="gif" [src]="gif.images.downsized.url"/>
+      </div>
+    </div>
+  </div>
+</div>

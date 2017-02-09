@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http, URLSearchParams } from '@angular/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map'
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/observable/of';
 
 import { Gif } from '../models/gif';
 
@@ -22,13 +25,24 @@ interface Pagination {
 export interface Response<T> {
   data: Array<T>;
   meta: ResponseStatus;
-  pagniation: Pagination;
+  pagination: Pagination;
 }
 
 @Injectable()
 export class GiphyApiService {
 
   constructor(private http: Http) { }
+
+  preloadImage(url) {
+    return new Observable(obs => {
+      const img = new Image();
+      img.src = url;
+      img.onload = () => {
+        obs.next()
+      };
+      img.onerror = obs.error;
+    });
+  }
 
   /**
    * search
@@ -47,7 +61,21 @@ export class GiphyApiService {
     params.set('api_key', publicKey);
     return this.http.get(endpoint + 'search', {
       search: params
-    }).map(res => res.json());
+    })
+      .map(res => res.json())
+      .mergeMap((res: Response<Gif>) => {
+        const tasks = [];
+
+        // lazy load gifs
+        res.data.forEach((gif: Gif) => {
+          console.log(gif.images.fixed_width.url);
+          console.log(gif.images.downsized.url);
+          tasks.push(this.preloadImage(gif.images.fixed_width.url));
+          tasks.push(this.preloadImage(gif.images.downsized.url));
+        });
+
+        return Observable.forkJoin(tasks);
+      }, (res: Response<Gif>) => res);
   }
 
 }
