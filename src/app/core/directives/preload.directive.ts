@@ -8,8 +8,6 @@ import { GiphyApiService } from '../services/giphy-api.service';
 })
 export class PreloadDirective implements OnInit {
 
-  static images: Map<string, void> = new Map();
-
   @Input('appPreload') public gif: Gif;
 
   constructor(private giphy: GiphyApiService,
@@ -20,13 +18,9 @@ export class PreloadDirective implements OnInit {
   }
 
   @HostListener('mouseover') public mouseover(): void {
-    const url = this.gif.images.downsized.url;
-    if (!PreloadDirective.images.has(url)) {
-      this.giphy.preloadImage(url)
-        .subscribe(() => {
-          PreloadDirective.images.set(url);
-          console.log(`preloaded ${url}`);
-        });
-    }
+    this.giphy.preloadImage(this.gif.id, this.gif.images.downsized.url)
+      .subscribe(() => {
+        console.log(`preloaded ${this.gif.images.downsized.url}`);
+      });
   }
 }

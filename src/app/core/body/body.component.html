@@ -3,13 +3,13 @@
 
   <!-- toggle search -->
   <div class="btn-group">
-    <label class="btn btn-primary" [(ngModel)]="radio" (ngModelChange)="search()" btnRadio="kittens">Kittens</label>
-    <label class="btn btn-primary" [(ngModel)]="radio" (ngModelChange)="search()" btnRadio="puppies">Puppies</label>
+    <label class="btn btn-primary" [(ngModel)]="radio" (ngModelChange)="onChangeTable({page: 1})" btnRadio="kittens">Kittens</label>
+    <label class="btn btn-primary" [(ngModel)]="radio" (ngModelChange)="onChangeTable({page: 1})" btnRadio="puppies">Puppies</label>
   </div>
 
   <div *ngIf="errorMsg !== ''" class="error">
     {{errorMsg}}
-    <button (click)="this.search()" type="button" class="btn btn-primary">Retry</button>
+    <button (click)="onChangeTable({page: 1})" type="button" class="btn btn-primary">Retry</button>
   </div>
   <div *ngIf="errorMsg === ''">
 

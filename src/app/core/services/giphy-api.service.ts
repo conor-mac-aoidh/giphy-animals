@@ -31,6 +31,8 @@ export interface Response<T> {
 @Injectable()
 export class GiphyApiService {
 
+  static images: Map<string, string> = new Map();
+
   constructor(private http: Http) { }
 
   /**
@@ -38,15 +40,20 @@ export class GiphyApiService {
    *
    * Preloads an image.
    *
+   * @param {string} id
    * @param {string} url
    * @return {Observable<Object>}
    */
-  preloadImage(url): Observable<void> {
+  preloadImage(id, url): Observable<Object> {
+    if (GiphyApiService.images.has(id + url)) {
+      return Observable.of({});
+    }
     return new Observable(obs => {
       const img = new Image();
       img.src = url;
       img.onload = () => {
-        obs.next();
+        GiphyApiService.images.set(id + url, url);
+        obs.next({});
         obs.complete();
       };
       img.onerror = (err) => {
@@ -79,7 +86,7 @@ export class GiphyApiService {
 
         // lazy load gifs
         res.data.forEach((gif: Gif) => {
-          tasks.push(this.preloadImage(gif.images.fixed_width.url));
+          tasks.push(this.preloadImage(gif.id, gif.images.fixed_width.url));
         });
 
         return Observable.forkJoin(tasks);
