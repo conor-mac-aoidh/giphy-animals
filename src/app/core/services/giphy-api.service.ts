@@ -33,14 +33,25 @@ export class GiphyApiService {
 
   constructor(private http: Http) { }
 
-  preloadImage(url) {
+  /**
+   * preloadImage
+   *
+   * Preloads an image.
+   *
+   * @param {string} url
+   * @return {Observable<Object>}
+   */
+  preloadImage(url): Observable<void> {
     return new Observable(obs => {
       const img = new Image();
       img.src = url;
       img.onload = () => {
-        obs.next()
+        obs.next();
+        obs.complete();
       };
-      img.onerror = obs.error;
+      img.onerror = (err) => {
+        obs.error(err);
+      };
     });
   }
 
@@ -68,10 +79,7 @@ export class GiphyApiService {
 
         // lazy load gifs
         res.data.forEach((gif: Gif) => {
-          console.log(gif.images.fixed_width.url);
-          console.log(gif.images.downsized.url);
           tasks.push(this.preloadImage(gif.images.fixed_width.url));
-          tasks.push(this.preloadImage(gif.images.downsized.url));
         });
 
         return Observable.forkJoin(tasks);

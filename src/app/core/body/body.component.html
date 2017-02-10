@@ -26,7 +26,7 @@
         <tbody>
           <tr *ngFor="let gif of gifs">
             <td>{{gif.id}}</td>
-            <td><img [src]="gif.images.fixed_width.url" (click)="showModal(gif)" /></td>
+            <td><img [appPreload]="gif" (click)="showModal(gif)" /></td>
           </tr>
         </tbody>
       </table>

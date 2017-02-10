@@ -62,7 +62,7 @@ export class BodyComponent implements OnInit, OnDestroy {
         this.gifs = res.data;
         this.loading = false;
         this.totalItems = res.pagination.total_count;
-        this.numPages = Math.max(this.totalItems / this.itemsPerPage);
+        this.numPages = Math.floor(this.totalItems / this.itemsPerPage);
         console.log('got some data! ', res);
       }, err => {
         this.errorMsg = 'Failed to fetch data..';
@@ -80,7 +80,9 @@ export class BodyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
 }
