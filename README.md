@@ -1,31 +1,43 @@
 # CuteAnimals
 
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.26.
+# Installation
 
-## Development server
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+```
+$ npm i
+```
 
-## Code scaffolding
+# Running application
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class/module`.
+```
+$ ng serve --prod
+```
 
-## Build
+# Features
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+- Bootstrap components
+- Loading spinner
+- Lazy loading of gifs in list view
+- Lazy loading of large gif in modal
 
-## Running unit tests
+# Main files
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- [BodyComponent](src/app/core/body/body.component.ts)
+- [GiphyAPIService](src/app/core/services/giphy-api.service.ts)
+- [Gif](src/app/core/models/gif.ts)
+- [PreloadDirective](src/app/core/directives/preload.directive.ts)
 
-## Running end-to-end tests
+# Tests
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+- [BodyComponent](src/app/core/body/body.component.spec.ts)
+- [GiphyAPIService](src/app/core/services/giphy-api.service.spec.ts)
+- [PreloadDirective](src/app/core/directives/preload.directive.spec.ts)
 
-## Deploying to GitHub Pages
+To run the test cases:
 
-Run `ng github-pages:deploy` to deploy to GitHub Pages.
+```
+$ ng test
+```
 
-## Further help
+# Questions
 
-To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Feel free to [contact me](mailto:conor@macaoidh.ie)
