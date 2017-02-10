@@ -42,7 +42,7 @@ describe('BodyComponent', () => {
 
   it('should run a search on init', () => {
     fixture.detectChanges();
-    expect(searchSpy).toHaveBeenCalledWith('kittens', 15);
+    expect(searchSpy).toHaveBeenCalledWith('kittens', 0);
   });
 
   it('should stop loading when search is completed', () => {
